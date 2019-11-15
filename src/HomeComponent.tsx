@@ -44,11 +44,15 @@ export class Home extends React.Component<HomePageProps, HomeState> {
     }
 
     private async onItemRemove(id: number) {
-        // здесь надо удалять item
+            await dataService.deleteItem(id);
+            const undeletedItems: TodoItem [] = this.state.items.filter((item) => item.id !== id);
+            this.setState({
+                items: undeletedItems
+            });
     }
 
-    private logout() {
-        dataService.logout();
+    private async logout() {
+        await dataService.logout();
         const history  = this.props.history;
         history.push("/login");
     }
