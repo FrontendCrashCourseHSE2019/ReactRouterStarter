@@ -2,6 +2,7 @@ import * as React from "react";
 import {ReactNode} from "react";
 import dataService, {TodoItem} from "./DataService";
 import {InputComponent} from "./InputComponent";
+import {RouteComponentProps} from "react-router";
 
 interface HomeState {
 
@@ -9,10 +10,14 @@ interface HomeState {
 
 }
 
-export class Home extends React.Component<{}, HomeState> {
+export interface HomePageProps extends RouteComponentProps {
+
+}
+
+export class Home extends React.Component<HomePageProps, HomeState> {
 
 
-    constructor(props: Readonly<{}>) {
+    constructor(props: Readonly<HomePageProps>) {
         super(props);
         this.state = {
             items: []
@@ -41,7 +46,9 @@ export class Home extends React.Component<{}, HomeState> {
     }
 
     private logout() {
-        // здесь сделать разлогин
+        dataService.logout();
+        const history  = this.props.history;
+        history.push("/login");
     }
 
     render(): ReactNode {
@@ -50,6 +57,10 @@ export class Home extends React.Component<{}, HomeState> {
 
                 <nav className="navbar navbar-expand-lg sticky-top navbar-dark bd-navbar">
                     <a className="navbar-brand" href="#">TaskIT</a>
+                    <span className="navbar-text">
+                        {dataService.currentUser && dataService.currentUser.login}
+                    </span>
+
                     <div id="navbarNavDropdown" className="navbar-collapse collapse">
                         <ul className="navbar-nav mr-auto">
 
