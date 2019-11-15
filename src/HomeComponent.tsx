@@ -30,15 +30,17 @@ export class Home extends React.Component<HomePageProps, HomeState> {
     }
 
     private async onNewTodoHandle(title: string) {
-        let currentUser = dataService.currentUser;
-
-        if (!dataService.isUserAuthorized() || currentUser == null) {
+        if (!dataService.isUserAuthorized()) {
+            this.props.history.push("/login");
             return;
         }
+        let currentUser = dataService.currentUser;
 
+        // @ts-ignore
         let todoItem = new TodoItem(-1, currentUser.login, title, new Date());
-
-        // здесь надо сохранять новый item
+        const {id} = await dataService.saveItem(todoItem);
+        todoItem.id = id;
+        this.setState({items: [...this.state.items, todoItem],});
     }
 
     private async onItemRemove(id: number) {
