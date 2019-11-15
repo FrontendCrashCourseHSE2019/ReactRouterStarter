@@ -38,22 +38,31 @@ export class Home extends React.Component<HomePageProps, HomeState> {
 
         // @ts-ignore
         let todoItem = new TodoItem(-1, currentUser.login, title, new Date());
-        const {id} = await dataService.saveItem(todoItem);
-        todoItem.id = id;
-        this.setState({items: [...this.state.items, todoItem],});
+
+        try {
+            const {id} = await dataService.saveItem(todoItem);
+            todoItem.id = id;
+            this.setState({items: [...this.state.items, todoItem],});
+        } catch (e) {
+            alert("Service is unavailable")
+        }
     }
 
     private async onItemRemove(id: number) {
+        try {
             await dataService.deleteItem(id);
             const undeletedItems: TodoItem [] = this.state.items.filter((item) => item.id !== id);
             this.setState({
                 items: undeletedItems
             });
+        } catch (e) {
+            alert("Service is unavailable")
+        }
     }
 
     private async logout() {
         await dataService.logout();
-        const history  = this.props.history;
+        const history = this.props.history;
         history.push("/login");
     }
 
