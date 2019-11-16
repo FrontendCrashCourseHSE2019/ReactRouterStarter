@@ -2,6 +2,7 @@ import * as React from "react";
 import {ReactNode} from "react";
 import dataService, {TodoItem} from "./DataService";
 import {InputComponent} from "./InputComponent";
+import {RouteComponentProps} from "react-router";
 
 interface HomeState {
 
@@ -9,10 +10,14 @@ interface HomeState {
 
 }
 
-export class Home extends React.Component<{}, HomeState> {
+export interface HomePageProps extends RouteComponentProps {
+
+}
+
+export class Home extends React.Component<HomePageProps, HomeState> {
 
 
-    constructor(props: Readonly<{}>) {
+    constructor(props: Readonly<HomePageProps>) {
         super(props);
         this.state = {
             items: []
@@ -25,23 +30,40 @@ export class Home extends React.Component<{}, HomeState> {
     }
 
     private async onNewTodoHandle(title: string) {
-        let currentUser = dataService.currentUser;
-
-        if (!dataService.isUserAuthorized() || currentUser == null) {
+        if (!dataService.isUserAuthorized()) {
+            this.props.history.push("/login");
             return;
         }
+        let currentUser = dataService.currentUser;
 
+        // @ts-ignore
         let todoItem = new TodoItem(-1, currentUser.login, title, new Date());
 
-        // здесь надо сохранять новый item
+        try {
+            const {id} = await dataService.saveItem(todoItem);
+            todoItem.id = id;
+            this.setState({items: [...this.state.items, todoItem],});
+        } catch (e) {
+            alert("Service is unavailable")
+        }
     }
 
     private async onItemRemove(id: number) {
-        // здесь надо удалять item
+        try {
+            await dataService.deleteItem(id);
+            const undeletedItems: TodoItem [] = this.state.items.filter((item) => item.id !== id);
+            this.setState({
+                items: undeletedItems
+            });
+        } catch (e) {
+            alert("Service is unavailable")
+        }
     }
 
-    private logout() {
-        // здесь сделать разлогин
+    private async logout() {
+        await dataService.logout();
+        const history = this.props.history;
+        history.push("/login");
     }
 
     render(): ReactNode {
@@ -50,6 +72,10 @@ export class Home extends React.Component<{}, HomeState> {
 
                 <nav className="navbar navbar-expand-lg sticky-top navbar-dark bd-navbar">
                     <a className="navbar-brand" href="#">TaskIT</a>
+                    <span className="navbar-text">
+                        {dataService.currentUser && dataService.currentUser.login}
+                    </span>
+
                     <div id="navbarNavDropdown" className="navbar-collapse collapse">
                         <ul className="navbar-nav mr-auto">
 
