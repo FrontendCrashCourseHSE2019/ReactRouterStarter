@@ -104,6 +104,10 @@ class DataService {
 
         delete newItem.id;
         let postPromise = fetch(`${DataService.DB_URL}/todo`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
             method: "POST",
             body: JSON.stringify(newItem)
         });
