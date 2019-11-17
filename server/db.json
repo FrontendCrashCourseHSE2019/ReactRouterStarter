@@ -1,10 +1,76 @@
 {
   "todo": [
     {
-      "id": 1,
-      "text": "This is first todo (which is stored on server by default)",
-      "date": "1970-01-01T07:12:37.382Z",
-      "author": "admin"
+      "author": "admin",
+      "text": "dsfrdrdtghfghfghfg",
+      "date": "2019-11-17T14:04:21.937Z",
+      "id": 10
+    },
+    {
+      "author": "admin",
+      "text": "",
+      "date": "2019-11-17T14:11:06.559Z",
+      "id": 11
+    },
+    {
+      "author": "admin",
+      "text": "",
+      "date": "2019-11-17T14:11:06.830Z",
+      "id": 12
+    },
+    {
+      "author": "admin",
+      "text": "ваы",
+      "date": "2019-11-17T14:11:08.238Z",
+      "id": 15
+    },
+    {
+      "author": "admin",
+      "text": "ваы",
+      "date": "2019-11-17T14:11:09.150Z",
+      "id": 21
+    },
+    {
+      "author": "admin",
+      "text": "ваы",
+      "date": "2019-11-17T14:11:09.286Z",
+      "id": 22
+    },
+    {
+      "author": "admin",
+      "text": "ваы",
+      "date": "2019-11-17T14:11:09.446Z",
+      "id": 23
+    },
+    {
+      "author": "admin",
+      "text": "ваы",
+      "date": "2019-11-17T14:11:09.598Z",
+      "id": 24
+    },
+    {
+      "author": "admin",
+      "text": "ваы",
+      "date": "2019-11-17T14:11:09.742Z",
+      "id": 25
+    },
+    {
+      "author": "admin",
+      "text": "ваы",
+      "date": "2019-11-17T14:11:09.894Z",
+      "id": 26
+    },
+    {
+      "author": "admin",
+      "text": "ваы",
+      "date": "2019-11-17T14:11:10.047Z",
+      "id": 27
+    },
+    {
+      "author": "admin",
+      "text": "ваы",
+      "date": "2019-11-17T14:11:10.351Z",
+      "id": 28
     }
   ],
   "user": [

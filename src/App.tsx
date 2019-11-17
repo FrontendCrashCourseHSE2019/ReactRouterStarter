@@ -11,9 +11,9 @@ const routes = [
     },
     {
         path: "/home",
-        render: ({location}: { location: any }) => {
+        render: ({location, history, match}: { location: any, history: any, match: any }) => {
             return dataService.isUserAuthorized() ? (
-                <Home/>
+                <Home location = {location} history={history} match={match}/>
             ) : (
                 <Redirect
                     to={{
