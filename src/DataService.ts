@@ -72,6 +72,10 @@ class DataService {
         this.currentUser = null;
     }
 
+    public async logout() {
+        this.currentUser = null;
+    }
+
     /**
      * Получить все TodoItem'ы пользователя
      */
