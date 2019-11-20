@@ -76,8 +76,6 @@ class DataService {
         this.currentUser = null
     }
 
-
-
     /**
      * Получить все TodoItem'ы пользователя
      */

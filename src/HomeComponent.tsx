@@ -74,6 +74,7 @@ export class Home extends React.Component<HomeComponentProps, HomeState> {
     render(): ReactNode {
         return (
             <div className="App">
+                
                 <nav className="navbar navbar-expand-lg sticky-top navbar-dark bd-navbar">
                     <a className="navbar-brand" href="#">TaskIT</a>
                     <div id="navbarNavDropdown" className="navbar-collapse collapse">
