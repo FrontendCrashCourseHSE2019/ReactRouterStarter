@@ -2,6 +2,7 @@ import * as React from "react";
 import {ReactNode} from "react";
 import dataService, {TodoItem} from "./DataService";
 import {InputComponent} from "./InputComponent";
+import {RouteComponentProps} from "react-router-dom";
 
 interface HomeState {
 
@@ -9,10 +10,12 @@ interface HomeState {
 
 }
 
-export class Home extends React.Component<{}, HomeState> {
+export interface HomeComponentProps extends RouteComponentProps {}
+
+export class Home extends React.Component<HomeComponentProps, HomeState> {
 
 
-    constructor(props: Readonly<{}>) {
+    constructor(props: Readonly<HomeComponentProps>) {
         super(props);
         this.state = {
             items: []
@@ -28,26 +31,49 @@ export class Home extends React.Component<{}, HomeState> {
         let currentUser = dataService.currentUser;
 
         if (!dataService.isUserAuthorized() || currentUser == null) {
+            this.props.history.push("/login");
             return;
         }
 
-        let todoItem = new TodoItem(-1, currentUser.login, title, new Date());
 
-        // здесь надо сохранять новый item
+        let todoItem = new TodoItem(-1, currentUser.login, title, new Date());
+        try {
+            const {id} = await dataService.saveItem(todoItem);
+            todoItem.id = id;
+            this.setState({
+                items: [...this.state.items, todoItem],
+            });
+        }
+            catch(e) {
+                alert("Error: The task cannot be created")
+            }
     }
 
     private async onItemRemove(id: number) {
-        // здесь надо удалять item
+        try {
+            await dataService.deleteItem(id);
+            this.setState({
+                items: this.state.items.filter((item) => item.id !== id)
+            });
+        }
+        catch(e) {
+            alert("Error: The task cannot be removed")
+        }
     }
 
-    private logout() {
-        // здесь сделать разлогин
+    private async logout() {
+        try {
+            await dataService.logout();
+            this.props.history.push("/login")
+        }
+        catch(e) {
+            alert("Error: Can't logout")
+        }
     }
 
     render(): ReactNode {
         return (
             <div className="App">
-
                 <nav className="navbar navbar-expand-lg sticky-top navbar-dark bd-navbar">
                     <a className="navbar-brand" href="#">TaskIT</a>
                     <div id="navbarNavDropdown" className="navbar-collapse collapse">
