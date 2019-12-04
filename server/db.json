@@ -1,12 +1,44 @@
 {
-  "todo": [
+  "shopItem": [
+    {
+      "id": 0,
+      "title": "G01/25 Warner Avenue, Findon",
+      "image": "https://i2.au.reastatic.net/800x600/e4fdbe24933561988b4ce7301c1be063dfdbc08394de310796fae3193074fb3d/image.jpg",
+      "price":  379000
+    },
     {
       "id": 1,
-      "text": "This is first todo (which is stored on server by default)",
-      "date": "1970-01-01T07:12:37.382Z",
-      "author": "admin"
+      "title": "2/656 Lower North East Road, Paradise",
+      "image": "https://i2.au.reastatic.net/800x600/019fd7ac0a3638c73a5b18f7a5cb38a2a382edda71305f43ec5d11b7f2b89dd1/image.jpg",
+      "price":  210000
+    },
+    {
+      "id": 2,
+      "title": "2/38 Sydney Street, Ridgehaven",
+      "image": "https://i2.au.reastatic.net/800x600/cfea01acd13e5214ee744464f3cb641d1ed595aa621c062ab6f4d0123ec74da4/image.jpg",
+      "price":  255000
+    },
+    {
+      "id": 3,
+      "title": "2/18-20 Penny Street, Semaphore",
+      "image": "https://i2.au.reastatic.net/800x600/0729e8f2e219171d9e57311ab8793233a4f9ed7d2e439939b192f6278017b9d7/image.jpg",
+      "price":  265000
+    },
+    {
+      "id": 4,
+      "title": "1005/29 Angas Street, Adelaide",
+      "image": "https://i2.au.reastatic.net/800x600/898b73808536c9440e259017e0b71d5835096a75bc1a8a3e92819d8c5c85243e/image.jpg",
+      "price":  399000
     }
   ],
+
+  "cart": [
+    {
+      "login": "admin",
+      "list": [0]
+    }
+  ],
+
   "user": [
     {
       "login": "admin",

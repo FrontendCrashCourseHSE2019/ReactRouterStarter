@@ -3,23 +3,25 @@ export interface User {
     password: string;
 }
 
-export class TodoItem {
+export class ShopItem {
 
     id: number;
+    title: string;
+    image: string;
+    price: number;
 
-    author: string;
-
-    text: string;
-
-    date: Date;
-
-    constructor(id: number, author: string, text: string, date: Date) {
+    constructor(id: number, title: string, image: string, price: number) {
         this.id = id;
-        this.author = author;
-        this.text = text;
-        this.date = date;
+        this.title = title;
+        this.image = image;
+        this.price = price;
     }
 
+}
+
+interface Cart {
+    login: string;
+    list: number[];
 }
 
 // Класс для работы с сервером
@@ -73,42 +75,62 @@ class DataService {
     }
 
     /**
-     * Получить все TodoItem'ы пользователя
+     * Получить все ShopItem'ы пользователя
      */
-    public async getTodoItems(): Promise<TodoItem[]> {
-        if (this.currentUser == null) {
-            return Promise.reject("User is not authorized");
-        }
+    public async getShopItems(filter: string = ".*"): Promise<ShopItem[]> {
+        // if (this.currentUser == null) {
+        //     return Promise.reject("User is not authorized");
+        // }
 
-        let todoResponsePromise: Promise<Response> = fetch(`${DataService.DB_URL}/todo?author=${this.currentUser.login}`);
+        let todoResponsePromise: Promise<Response> = fetch(`${DataService.DB_URL}/shopItem?title_like=${filter}`);
 
         let response: Response = await todoResponsePromise;
 
-        let jsonPromise: Promise<TodoItem[]> = (response).json();
+        let jsonPromise: Promise<ShopItem[]> = (response).json();
 
         return await jsonPromise;
+    }
+
+
+    public async getCart(): Promise<ShopItem[]> {
+        let cartResponsePromise: Promise<Response> = fetch(`${DataService.DB_URL}/cart?login=admin`);
+
+        let response: Response = await cartResponsePromise;
+
+        let jsonPromise: Promise<Cart[]> = (response).json();
+        let cart: Cart = (await jsonPromise)[0];
+
+        let shopItems = [];
+
+        for (let shopItemId of cart.list) {
+            let tmp: ShopItem[] = await ((await fetch(`${DataService.DB_URL}/shopItem?id=${shopItemId}`)).json());
+            let shopItem = tmp[0];
+            shopItems.push(shopItem);
+        }
+
+        return shopItems;
     }
 
     /**
      * Добавить новый TodoItem на сервер
      * @param newItem новый TodoItem
      */
-    public async saveItem(newItem: TodoItem): Promise<TodoItem> {
-        if (this.currentUser == null) {
-            return Promise.reject("User is not authorized");
-        }
-
-        delete newItem.id;
-        let postPromise = fetch(`${DataService.DB_URL}/todo`, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "POST",
-            body: JSON.stringify(newItem)
-        });
-        return await (await postPromise).json();
-    }
+    // public async saveItem(newItem: TodoItem): Promise<TodoItem> {
+    //     if (this.currentUser == null) {
+    //         return Promise.reject("User is not authorized");
+    //     }
+    //
+    //     delete newItem.id;
+    //     let postPromise = fetch(`${DataService.DB_URL}/todo`, {
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //         },
+    //         method: "POST",
+    //         body: JSON.stringify(newItem)
+    //     });
+    //     return await (await postPromise).json();
+    // }
 
     /**
      * Удалить TodoItem

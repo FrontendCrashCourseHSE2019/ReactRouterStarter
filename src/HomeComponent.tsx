@@ -1,93 +1,62 @@
 import * as React from "react";
 import {ReactNode} from "react";
-import dataService, {TodoItem} from "./DataService";
-import {InputComponent} from "./InputComponent";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import "./home.scss";
+import Button from "react-bootstrap/Button";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {Link, RouteComponentProps, withRouter} from "react-router-dom";
+import {renderRoutes, RouteConfig} from "react-router-config";
 
-interface HomeState {
 
-    items: TodoItem[];
-
+interface HomeComponentProps extends RouteComponentProps {
+    route: RouteConfig
 }
 
-export class Home extends React.Component<{}, HomeState> {
+export class Home extends React.Component<HomeComponentProps, {}> {
 
 
-    constructor(props: Readonly<{}>) {
+    constructor(props: Readonly<HomeComponentProps>) {
         super(props);
-        this.state = {
-            items: []
-        };
-        dataService.getTodoItems().then(value => {
-            this.setState({
-                items: value
-            });
-        });
+        // сразу переходим на главную страницу
+        this.props.history.push("/home/main")
     }
 
-    private async onNewTodoHandle(title: string) {
-        let currentUser = dataService.currentUser;
-
-        if (!dataService.isUserAuthorized() || currentUser == null) {
-            return;
-        }
-
-        let todoItem = new TodoItem(-1, currentUser.login, title, new Date());
-
-        // здесь надо сохранять новый item
-    }
-
-    private async onItemRemove(id: number) {
-        // здесь надо удалять item
-    }
 
     private logout() {
-        // здесь сделать разлогин
+    }
+
+    componentDidMount(): void {
+
     }
 
     render(): ReactNode {
         return (
             <div className="App">
 
-                <nav className="navbar navbar-expand-lg sticky-top navbar-dark bd-navbar">
-                    <a className="navbar-brand" href="#">TaskIT</a>
-                    <div id="navbarNavDropdown" className="navbar-collapse collapse">
-                        <ul className="navbar-nav mr-auto">
+                <Navbar bg="dark" variant="dark">
+                    <Navbar.Brand className="brand">eShop</Navbar.Brand>
+                    <Navbar.Collapse>
+                        <Nav className="mr-auto"/>
+                        <Nav>
+                            <Nav.Item className="mr-2">
+                                <Link to="/home/cart">
+                                    <Button variant="outline-danger">
+                                        <FontAwesomeIcon icon="shopping-cart"/>Cart
+                                    </Button>
+                                </Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Button variant="outline-primary" onClick={() => this.logout()}>Sign out</Button>
+                            </Nav.Item>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
 
-                        </ul>
-                        <ul className="navbar-nav">
-                            <li className="nav-item text-nowrap">
-                                <div className="btn btn-info" onClick={e => this.logout()}>Sign out</div>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
+                <main className="py-md-3 px-md-5">
 
-                <main className="py-md-3 pl-md-5">
+                    {renderRoutes(this.props.route.routes)}
 
-                    <div className="container">
-
-                        <InputComponent onNewTodoCreated={title => this.onNewTodoHandle(title)}/>
-
-                        <div id="items-container">
-                            {this.state.items.map(todoItem => {
-                                return (
-                                    <div className="card" key={todoItem.id}>
-                                        <div className="d-flex p-2 bd-highlight justify-content-between">
-                                            <h5 className="mb-1">{todoItem.text}</h5>
-                                            <div className="task-date">{todoItem.date.toLocaleString()}</div>
-                                            <button className="btn btn-outline-secondary" type="button"
-                                                    onClick={() => {
-                                                        this.onItemRemove(todoItem.id)
-                                                    }}
-                                            >Delete
-                                            </button>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                        </div>
-
-                    </div>
                 </main>
 
             </div>
@@ -95,4 +64,5 @@ export class Home extends React.Component<{}, HomeState> {
     }
 }
 
-export default Home;
+// нужно для всех компонент, у которых должны быть пути
+export default withRouter(Home);
